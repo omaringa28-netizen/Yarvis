@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050812">
+<title>YARVIS AI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(
+    circle at center, #101b36 0%, #050812 55%, #020308 100%
+  );
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.app {
+  width: 100%;
+  max-width: 430px;
+  padding: 30px 22px;
+}
+.top {
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: #70baff;
+}
+h1 {
+  font-size: 35px;
+  letter-spacing: 8px;
+  margin-bottom: 5px;
+}
+.subtitle {
+  color: #8194b9;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+.orb {
+  width: 225px;
+  height: 225px;
+  margin: 65px auto 35px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #b9e9ff 0%,
+    #397eea 8%,
+    #102e75 30%,
+    #050b22 68%,
+    #01030a 100%
+  );
+  box-shadow:
+    0 0 20px #328cff,
+    0 0 60px #175bca,
+    inset 0 0 35px #74caff;
+  animation: pulse 3s infinite ease-in-out;
+  position: relative;
+}
+.orb::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border: 1px solid #4a9dff;
+  border-radius: 50%;
+  opacity: .6;
+  animation: rotate 8s linear infinite;
+}
+@keyframes pulse {
+  0%,100% {
+    transform: scale(1);
+    box-shadow: 0 0 25px #328cff, 0 0 55px #175bca;
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 45px #328cff, 0 0 90px #175bca;
+  }
+}
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+.status {
+  color: #75bfff;
+  letter-spacing: 3px;
+  font-size: 12px;
+  margin-bottom: 30px;
+}
+button {
+  border: 1px solid #438bdf;
+  color: white;
+  background: #10274b;
+  border-radius: 35px;
+  padding: 15px 25px;
+  font-size: 15px;
+  margin: 6px;
+}
+button:active {
+  background: #235ca1;
+}
+.input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 30px;
+  border: 1px solid #294b7c;
+  background: #0a1428;
+  color: white;
+  margin-top: 20px;
+}
+.footer {
+  margin-top: 45px;
+  font-size: 10px;
+  color: #637697;
+  letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="top">PERSONAL AI SYSTEM</div>
+
+  <h1>YARVIS</h1>
+  <div class="subtitle">ASISTENTE INTELIGENTE</div>
+
+  <div class="orb"></div>
+
+  <div class="status" id="status">
+    SISTEMA EN ESPERA
+  </div>
+
+  <button onclick="voiceInfo()">
+    🎙 HABLAR
+  </button>
+
+  <button onclick="chatInfo()">
+    💬 CHAT
+  </button>
+
+  <input class="input"
+    placeholder="Escribe a YARVIS..."
+    id="message">
+
+  <div class="footer">
+    YARVIS AI · VERSION 1.0
+  </div>
+</div>
+
+<script>
+function voiceInfo() {
+  document.getElementById("status").textContent =
+    "VOZ: PRÓXIMAMENTE";
+}
+
+function chatInfo() {
+  document.getElementById("status").textContent =
+    "CHAT IA: PRÓXIMAMENTE";
+}
+</script>
+
+</body>
+</html>
