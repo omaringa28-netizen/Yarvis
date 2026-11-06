@@ -8,15 +8,12 @@
 <title>YARVIS AI</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(
-    circle at center, #101b36 0%, #050812 55%, #020308 100%
-  );
+  background: radial-gradient(circle at center, #101b36 0%, #050812 55%, #020308 100%);
   color: white;
   font-family: Arial, sans-serif;
   display: flex;
@@ -24,46 +21,42 @@ body {
   align-items: center;
   text-align: center;
 }
+
 .app {
   width: 100%;
   max-width: 430px;
   padding: 30px 22px;
 }
+
 .top {
   font-size: 13px;
   letter-spacing: 4px;
   color: #70baff;
 }
+
 h1 {
   font-size: 35px;
   letter-spacing: 8px;
   margin-bottom: 5px;
 }
+
 .subtitle {
   color: #8194b9;
   font-size: 12px;
   letter-spacing: 3px;
 }
+
 .orb {
   width: 225px;
   height: 225px;
   margin: 65px auto 35px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 30%,
-    #b9e9ff 0%,
-    #397eea 8%,
-    #102e75 30%,
-    #050b22 68%,
-    #01030a 100%
-  );
-  box-shadow:
-    0 0 20px #328cff,
-    0 0 60px #175bca,
-    inset 0 0 35px #74caff;
+  background: radial-gradient(circle at 35% 30%, #b9e9ff 0%, #397eea 8%, #102e75 30%, #050b22 68%, #01030a 100%);
+  box-shadow: 0 0 20px #328cff, 0 0 60px #175bca, inset 0 0 35px #74caff;
   animation: pulse 3s infinite ease-in-out;
   position: relative;
 }
+
 .orb::after {
   content: "";
   position: absolute;
@@ -73,25 +66,23 @@ h1 {
   opacity: .6;
   animation: rotate 8s linear infinite;
 }
+
 @keyframes pulse {
-  0%,100% {
-    transform: scale(1);
-    box-shadow: 0 0 25px #328cff, 0 0 55px #175bca;
-  }
-  50% {
-    transform: scale(1.06);
-    box-shadow: 0 0 45px #328cff, 0 0 90px #175bca;
-  }
+  0%,100% { transform: scale(1); box-shadow: 0 0 25px #328cff, 0 0 55px #175bca; }
+  50% { transform: scale(1.06); box-shadow: 0 0 45px #328cff, 0 0 90px #175bca; }
 }
+
 @keyframes rotate {
   to { transform: rotate(360deg); }
 }
+
 .status {
   color: #75bfff;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   font-size: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
+
 button {
   border: 1px solid #438bdf;
   color: white;
@@ -100,10 +91,13 @@ button {
   padding: 15px 25px;
   font-size: 15px;
   margin: 6px;
+  cursor: pointer;
 }
-button:active {
-  background: #235ca1;
+
+button:disabled {
+  opacity: .5;
 }
+
 .input {
   width: 100%;
   padding: 16px;
@@ -112,9 +106,24 @@ button:active {
   background: #0a1428;
   color: white;
   margin-top: 20px;
+  font-size: 15px;
 }
+
+.reply {
+  margin-top: 18px;
+  padding: 15px;
+  background: #0a1428;
+  border: 1px solid #294b7c;
+  border-radius: 15px;
+  text-align: left;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  display: none;
+}
+
 .footer {
-  margin-top: 45px;
+  margin-top: 35px;
   font-size: 10px;
   color: #637697;
   letter-spacing: 2px;
@@ -132,37 +141,91 @@ button:active {
 
   <div class="orb"></div>
 
-  <div class="status" id="status">
-    SISTEMA EN ESPERA
-  </div>
+  <div class="status" id="status">SISTEMA EN ESPERA</div>
 
-  <button onclick="voiceInfo()">
-    🎙 HABLAR
-  </button>
-
-  <button onclick="chatInfo()">
-    💬 CHAT
-  </button>
+  <button onclick="voiceInfo()">🎙 HABLAR</button>
+  <button onclick="chatInfo()">💬 CHAT</button>
 
   <input class="input"
     placeholder="Escribe a YARVIS..."
-    id="message">
+    id="message"
+    autocomplete="off">
+
+  <button id="sendButton" onclick="sendMessage()">ENVIAR MENSAJE</button>
+
+  <div class="reply" id="reply"></div>
 
   <div class="footer">
     YARVIS AI · VERSION 1.0
   </div>
+
 </div>
 
 <script>
+const WORKER_URL = "https://yarvis-cerebro.omaringa28.workers.dev/";
+
 function voiceInfo() {
   document.getElementById("status").textContent =
     "VOZ: PRÓXIMAMENTE";
 }
 
 function chatInfo() {
+  document.getElementById("message").focus();
   document.getElementById("status").textContent =
-    "CHAT IA: PRÓXIMAMENTE";
+    "CHAT YARVIS DISPONIBLE";
 }
+
+async function sendMessage() {
+  const input = document.getElementById("message");
+  const status = document.getElementById("status");
+  const reply = document.getElementById("reply");
+  const button = document.getElementById("sendButton");
+
+  const message = input.value.trim();
+
+  if (!message) {
+    status.textContent = "ESCRIBE UN MENSAJE";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "YARVIS ESTÁ PENSANDO...";
+  reply.style.display = "block";
+  reply.textContent = "Conectando con YARVIS...";
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: message })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Error de conexión");
+    }
+
+    reply.textContent = data.reply || "No recibí una respuesta.";
+    status.textContent = "YARVIS EN LÍNEA";
+    input.value = "";
+
+  } catch (error) {
+    reply.textContent =
+      "No pude conectar con mi cerebro. " + error.message;
+    status.textContent = "ERROR DE CONEXIÓN";
+  } finally {
+    button.disabled = false;
+  }
+}
+
+document.getElementById("message").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
 </script>
 
 </body>
