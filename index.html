@@ -164,9 +164,43 @@ button:disabled {
 <script>
 const WORKER_URL = "https://yarvis-cerebro.omaringa28.workers.dev/";
 
+
 function voiceInfo() {
-  document.getElementById("status").textContent =
-    "VOZ: PRÓXIMAMENTE";
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    document.getElementById("status").textContent =
+      "MICRÓFONO NO COMPATIBLE";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "es-ES";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = function() {
+    document.getElementById("status").textContent =
+      "YARVIS TE ESTÁ ESCUCHANDO...";
+  };
+
+  recognition.onresult = function(event) {
+    const texto = event.results[0][0].transcript;
+
+    document.getElementById("message").value = texto;
+
+    sendMessage();
+  };
+
+  recognition.onerror = function() {
+    document.getElementById("status").textContent =
+      "ERROR DEL MICROFONO";
+  };
+
+  recognition.start();
 }
 
 function chatInfo() {
