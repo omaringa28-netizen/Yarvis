@@ -209,6 +209,26 @@ async function sendMessage() {
     }
 
     reply.textContent = data.reply || "No recibí una respuesta.";
+    const voz = new SpeechSynthesisUtterance(data.reply);
+
+voz.lang = "es-ES";
+voz.rate = 0.90;
+voz.pitch = 0.75;
+voz.volume = 1;
+
+const voces = window.speechSynthesis.getVoices();
+
+const vozMasculina = voces.find(v =>
+  v.lang.startsWith("es") &&
+  /male|masculino|hombre/i.test(v.name)
+);
+
+if (vozMasculina) {
+  voz.voice = vozMasculina;
+}
+
+window.speechSynthesis.cancel();
+window.speechSynthesis.speak(voz);
     status.textContent = "YARVIS EN LÍNEA";
     input.value = "";
 
