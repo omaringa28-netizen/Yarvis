@@ -1,4 +1,5 @@
 {
+  "id": "./",
   "name": "YARVIS",
   "short_name": "YARVIS",
   "description": "Asistente personal inteligente",
@@ -6,13 +7,19 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-"display_override": ["standalone", "minimal-ui"],
-"lang": "es",
-"dir": "ltr",
-"background_color": "#020817",
+  "display_override": ["standalone", "minimal-ui"],
+  "lang": "es",
+  "dir": "ltr",
+  "background_color": "#020817",
   "theme_color": "#020817",
   "orientation": "portrait",
   "icons": [
+    {
+      "src": "./yarvis-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "./icon.svg",
       "sizes": "any",
@@ -20,3 +27,4 @@
       "purpose": "any"
     }
   ]
+}
