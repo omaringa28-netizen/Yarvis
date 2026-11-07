@@ -2,6 +2,7 @@
   "name": "YARVIS",
   "short_name": "YARVIS",
   "description": "Asistente personal inteligente",
+  "categories": ["productivity", "utilities"],
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
